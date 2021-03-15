@@ -140,6 +140,10 @@ def run_the_app():
     filtered_df = sm_df_full[sm_df_full['review_clean2'].isin(user_list)]
     st.write(f"users input list: {user_list}")
     
+    
+    
+    
+    
     st.write("OR")
     
     # cc: change all genres to keyword
