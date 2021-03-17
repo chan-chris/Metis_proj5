@@ -5,7 +5,7 @@ import numpy as np
 
 def circbar(data,maxarts=40):
 
-    my_cmap = plt.get_cmap("plasma")
+    my_cmap = plt.get_cmap("viridis") # viridis
     # Reorder the dataframe
     data = data[0:maxarts]
     data = data.sort_values(by=['Count'])

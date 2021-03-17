@@ -51,25 +51,31 @@ def run_the_data():
     stats_df = load_full_data('../data/df_genre_stream_long.csv')
     gentime_df = load_full_data('../data/df_genre_time.csv')
     circbar_df = load_full_data('../data/df_top_mentions.csv')
+    sm_df = load_full_data('../data/df_genre_stream_wide.csv')
     
     st.write("X Unique albums")
     st.write("X Reviews")
     st.write("X Artists")
     st.write("X Sub-Genres")
-    st.write("---")
+    #st.write("---")
+    
     st.subheader("Here is a sample of the data:")
     sm_df_full.sort_values(by=['artist'],inplace=True)
     st.dataframe(sm_df_full.sample(10))
     
     # cc: descriptive stats
+    
+    st.title("Some Visuals and Descriptives:")
+    #st.write("---------------------------------------------------------------")
+    st.subheader("Here are Some Descriptives:")
     stats_vis = st.checkbox("Look at the descriptive statistics")
     if stats_vis:        
-        st.dataframe(stats_dfsort.describe())
+        st.dataframe(sm_df.describe())
         
-    st.subheader("Here are some visualisations of the data:")
+    
     
     # cc: sub genres
-    
+    st.subheader("Here are Some Visuals:")
     #st.plotly_chart(fig)
     viz_disp = st.checkbox("Look at the sub-genres in reviews across time")
     if viz_disp:
@@ -77,7 +83,8 @@ def run_the_data():
         fig, ax = plt.subplots(figsize=(11, 8))
         #cmap= sns.cubehelix_palette()
         kwargs = {'alpha':.9,'linewidth':1, 'linestyle':'-', 'linecolor':'k','rasterized':False, 'edgecolor':'w', "capstyle":'projecting',}
-        sns.heatmap(gentime_df, cmap='cubehelix', **kwargs )
+        gentime_df_rmv = gentime_df[1:]
+        sns.heatmap(gentime_df_rmv, cmap='cubehelix', **kwargs )
         plt.tight_layout()
         st.pyplot() 
     
@@ -133,15 +140,24 @@ def run_the_app():
         # Condition 1 (text search)
         user_input = st.text_input("OPTION 1: Type in a favorite artist and see if there's a connection:")
         user_list = list(user_input.split(" "))
+        
+        
+        # Condition 2 (integer - how many matches would you like to see)
+        user_match = st.number_input("Type in the number of matches (if any) you'd like to see (Max 10):",min_value=0, max_value=10, step=1) #, format=None, key=None))
+        #user_match_list = list(user_match_int)
 
+        # Condition 3 (integer - how many album recs would you like to see)
+        user_sims = st.number_input("Type in the number of similar albums to each match (Max 3):",min_value=0,max_value=3,step=1)
         # filtered_df = sm_df_full[sm_df_full['review_clean2'].isin(user_list)]
-        st.write(f"Your artist search term: {user_list}")
+        #st.write(f"Your artist search term: {user_list}")
 
-    #st.write("OR")
+        disco_button=st.button('Discover by Artist Mentions!')
+    
     
     elif filter_by == 'Genre':
         # cc: change all genres to keyword
         # Condition 2 (genre search)
+        sm_df_full.sort_values(by=['genre','subgenre'],inplace=True)
         chosen_genre = st.selectbox('OPTION 2: Choose a genre:', sm_df_full['subgenre'].unique().tolist())
 
         #cc: dropdown:
@@ -150,6 +166,7 @@ def run_the_app():
 
         # cc: add an o-meter by looking at the number of subgenre mentions
         # Condition 4 (how often keywords popup)
+        sm_df_full.sort_values(by=['count'],inplace=True)
         sub_ometer = st.selectbox('Subgenre-ometer:', sm_df_full.loc[sm_df_full['subgenre2'] == chosen_subsub]['count'].unique().tolist()) 
 
     
@@ -160,6 +177,7 @@ def run_the_app():
         # enter button here first to generate results
         
         # Based on above conditions here are your lists
+        sm_df_full.sort_values(by=['artist'],inplace=True)
         desired_artist = st.selectbox("Here's a list of artists:", sm_df_full.loc[(sm_df_full["subgenre2"] == chosen_subsub) & (sm_df_full["count"] == sub_ometer), 'artist'].unique().tolist()) #.iloc[0]
 
         desired_album = sm_df_full.loc[(sm_df_full["subgenre2"] == chosen_subsub) & (sm_df_full["artist"] == desired_artist) & (sm_df_full["count"]==sub_ometer),'album'].unique().tolist()
@@ -205,7 +223,8 @@ def run_the_app():
 ### Content Based Recommendation (by SEARCH)
 ########################################################################################
 
-    if filter_by == 'Search':
+    #if st.button('button'):
+    if (filter_by == 'Search') and (disco_button):
 
         similarities = {}
 
@@ -231,13 +250,14 @@ def run_the_app():
 
                 for i in range(rec_items):
                     if i==0:
+                        
                         #print(f"Matched Album Number {i+1}:")
-                        st.write(f"{recom_album[i][1]} by {artist}") # with {round(recom_album[i][0],3)} similarity score")  # if can add artist sim score
-                        st.write("--------------------")
+                        st.write(f"{recom_album[i][1].title()} by {artist.title()}") # with {round(recom_album[i][0],3)} similarity score")  # if can add artist sim score
+                        #st.write("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
                     else:    
-                        st.write(f"Recommended album based on matched (above) {i}:")            
-                        st.write(f"{recom_album[i][1]} by {recom_album[i][2]} with {round(recom_album[i][0], 3)} similarity score") 
-                        st.write("--------------------")
+                        st.subheader(f"Recommended album based on matched (above) {i}:")            
+                        st.write(f"{recom_album[i][1].title()} by {recom_album[i][2].title()} with {round(recom_album[i][0], 3)} similarity score") 
+                        #st.write("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
 
             def recommend(self, recommendation):
                 artist = recommendation['artist']
@@ -256,7 +276,7 @@ def run_the_app():
 
         ### Primary function for album recs based on REVIEW CLEAN (lowercase, remove punc, no lem)
 
-        def artsimrec(artmatch=1,simalb=0):
+        def artsimrec(artmatch,simalb):
             # get list of indeces containing the chosen word that's in the review text
             #_a= sm_df_full.index[sm_df_full['review_clean2'].str.contains(art,na=False)]
             _a= sm_df.index[sm_df['review_clean2'].str.contains(user_input,na=False)]
@@ -272,10 +292,11 @@ def run_the_app():
                 st.write(f"The number of reviews containing {user_list} are: {len(_a)}") 
                 st.write(f"User requested {len(a)} Matches")
                 st.write(f"User requested {simalb} Recommended albums per Match")
-                st.write("--------------------")
+                
 
                 for k,j in enumerate(a):
-                    st.write(f"Matched Album Number {k+1}:")
+                    st.write("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+                    st.subheader(f"Matched Album Number {k+1}:")
                     recommendation = {
                        "artist": sm_df['artist'].iloc[j],
                        "album": sm_df['album'].iloc[j],
@@ -290,10 +311,10 @@ def run_the_app():
     #    artsimrec('kanye',10,3)
         #st.write(artsimrec('kanye'))
 
-        if st.button("Discover some Jazz!"):
-            st.write(artsimrec())
-        else:
-            st.write(artsimrec())
+        #if st.button("Discover some Jazz!"):
+        st.write(artsimrec(artmatch=user_match,simalb=user_sims))
+#         else:
+#             st.write(artsimrec(artmatch=user_match,simalb=user_sims))
     
     
 ########################################################################################
@@ -336,14 +357,14 @@ def run_the_app():
                 rec_alb_dict['subgenre2'] = sm_df_full.loc[full_ind]['subgenre2']
 
                 recommended_albums.append(rec_alb_dict)
-            st.write("These are the albums you should check out:")
-
+            st.subheader("These are the albums you should check out:")
+            st.write("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
             for i in range(0,3):
                 st.write(i+1)
         #         img_url = recommended_albums[i]['Image']
         #         load_image(img_url)
-                st.write(f"{recommended_albums[i]['album']} from {recommended_albums[i]['artist']} in the {recommended_albums[i]['subgenre2']} sub-genre")
-                st.write("The stats:")
+                st.write(f"{recommended_albums[i]['album'].title()} by {recommended_albums[i]['artist'].title()} in the {recommended_albums[i]['subgenre2'].title()} sub-genre")
+                #st.write("The stats:")
 
         #             st.write(f"Rating: {recommended_albums[i]['Rating']}")
         #             st.write(f"ABV: {recommended_albums[i]['abv']}")
@@ -393,7 +414,7 @@ def run_the_app():
     #                 else:
     #                     st.write("Sorry, there are no similar albums in that subgenre")
 
-        if st.button("Discover!"):
+        if st.button("Discover by Genre!"):
             st.write(full_recommendations())
 #         else:
 #             st.write(full_recommendations())
