@@ -2,10 +2,12 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+import seaborn as sns
 
 def circbar(data,maxarts=40):
 
-    my_cmap = plt.get_cmap("viridis") # viridis
+    my_cmap=sns.cm.rocket_r  #cmap= sns.cubehelix_palette()    
+    #my_cmap = plt.get_cmap("viridis") # viridis
     # Reorder the dataframe
     data = data[0:maxarts]
     data = data.sort_values(by=['Count'])
