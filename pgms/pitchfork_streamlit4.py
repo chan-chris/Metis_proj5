@@ -66,10 +66,9 @@ def run_the_data():
     circbar_df = load_full_data('../data/df_top_mentions.csv')
     sm_df = load_full_data('../data/df_emo_top_wide_nm.csv')
     
-    st.write("X Unique albums")
-    st.write("X Reviews")
-    st.write("X Artists")
-    st.write("X Sub-Genres")
+    st.write("1,025 Unique Albums and Reviews")    
+    st.write("693 Artists")
+    st.write("225 Sub-Genres")
     #st.write("---")
     
 #     st.subheader("Here is a sample of the data:")
@@ -119,7 +118,7 @@ def run_the_data():
     # cc: top artist mentions
     viz_disp2 = st.checkbox("Look at the top-artist mentions of all-time")
     if viz_disp2:
-        st.write("These are the top 50 artists mentioned in reviews over the years:")
+        st.write("These are the top 60 artists mentioned in reviews over the years:")
         cb.circbar(circbar_df)
         st.pyplot()
         
@@ -207,7 +206,7 @@ def run_the_app():
     elif filter_by == 'Genre':
         # cc: change all genres to keyword
         # Condition 2 (genre search)
-        sm_df_full.sort_values(by=['genre','subgenre'],inplace=True)
+        sm_df_full.sort_values(by=['genre','subgenre','count','artist'],inplace=True)
         chosen_genre = st.selectbox('OPTION 2: Choose a genre:', sm_df_full['subgenre'].unique().tolist())
 
         #cc: dropdown:
@@ -216,11 +215,11 @@ def run_the_app():
 
         # cc: add an o-meter by looking at the number of subgenre mentions
         # Condition 4 (how often keywords popup)
-        sm_df_full.sort_values(by=['count'],inplace=True)
+        #sm_df_full.sort_values(by=['count'],inplace=True)
         sub_ometer = st.selectbox('Subgenre-ometer:', sm_df_full.loc[sm_df_full['subgenre2'] == chosen_subsub]['count'].unique().tolist()) 
         
         # Based on above conditions here are your lists
-        sm_df_full.sort_values(by=['artist'],inplace=True)
+        #sm_df_full.sort_values(by=['artist'],inplace=True)
         desired_artist = st.selectbox("Here's a list of artists:", sm_df_full.loc[(sm_df_full["subgenre2"] == chosen_subsub) & (sm_df_full["count"] == sub_ometer), 'artist'].unique().tolist()) #.iloc[0]
 
         desired_album = sm_df_full.loc[(sm_df_full["subgenre2"] == chosen_subsub) & (sm_df_full["artist"] == desired_artist) & (sm_df_full["count"]==sub_ometer),'album'].unique().tolist()
@@ -384,12 +383,16 @@ def run_the_app():
 
                 recommended_albums.append(rec_alb_dict)
             st.subheader("These are the albums you should check out:")
-            st.write("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+            #st.write("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
             for i in range(0,3):
+                st.write("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
                 st.write(i+1)
         #         img_url = recommended_albums[i]['Image']
         #         load_image(img_url)
+                #st.write(f"{recommended_albums[i]['album'].title()} by {recommended_albums[i]['artist'].title()} in the {recommended_albums[i]['subgenre2'].title()} sub-genre")
                 st.write(f"{recommended_albums[i]['album'].title()} by {recommended_albums[i]['artist'].title()} in the {recommended_albums[i]['subgenre2'].title()} sub-genre")
+                #st.image(['../img/soundmirrors_coldcut.jpg'])
+            
                 #st.write("The stats:")
 
         #             st.write(f"Rating: {recommended_albums[i]['Rating']}")
