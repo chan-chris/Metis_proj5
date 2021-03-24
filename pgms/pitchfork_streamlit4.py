@@ -380,6 +380,9 @@ def run_the_app():
                         
                         #load_audio(audio)
                         load_audio2(audio2)
+                        st.button(f"Love it!: {recom_album[i][1]}")
+                        st.button(f"Not into it! {recom_album[i][1]}")
+                        
                         
                     else:    
                         st.subheader(f"Recommended album based on matched (above) {i}:")            
@@ -552,6 +555,8 @@ def run_the_app():
                 # audio_url = recommended_albums[i]['valence']
                 audio_url2 = recommended_albums[i]['audio2']
                 load_audio2(audio_url2)
+                st.button(f"Love it! {recommended_albums[i]['album']}")
+                st.button(f"Not into it! {recommended_albums[i]['album']}")
                 #audio_url  = audio_url.strip('\"')
                 #st.write(f"Audio url: {audio_url}")
                 #load_audio(audio_url)
