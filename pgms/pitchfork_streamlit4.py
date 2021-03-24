@@ -19,35 +19,48 @@ from IPython.display import Audio
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
 def main():
-    st.title("Hello Music Lovers!")
-    st.markdown("Welcome to my **Jazz Album Discovery Recommender**. On this page, feel free to take a peek at some general jazz highlights from **Pitchfork Jazz** album reviews. Alternatively, on the **Jazz Discovery** page, you can simply choose a music sub-genre or an Artist search and it will introduce you to a variety of jazz albums based on your musical tastes. Enjoy the jazz discovery journey!")
+    #st.title("Hello Music Lovers!")
+#     st.title("The Modern Jazz Album Discovery Tool")
+#     st.image("../img/jazzcoverstring.png")
+#     st.markdown("---")
+#     st.markdown("**Hello music lovers** and welcome to my **Modern Jazz Album Discovery Recommender**. On this page, feel free to take a peek at some data insights from **Pitchfork Jazz** album reviews. Alternatively, on the **Jazz Discovery** page, you can discover new music by searching for Artists you know and enjoy OR by choose a familiar sub-genre and we'll introduce you to a variety of jazz albums based on your musical tastes. Enjoy the jazz discovery journey!")
     
     st.sidebar.title("What do you want to do?")
-    app_mode = st.sidebar.selectbox("Choose the mode", ["Look at the data", "Jazz Discovery"])
+    app_mode = st.sidebar.selectbox("Choose the mode", ["Explore the data", "Jazz Discovery"])
 
-    if app_mode == "Look at the data":
+    if app_mode == "Explore the data":
+        
+        st.title("The Modern Jazz Album Discovery Tool")
+        st.image("../img/jazzcoverstring.png",width=600)
+        st.markdown("---")
+        st.markdown("**Hello music lovers** and welcome to my **Modern Jazz Album Discovery Recommender**. On this page, feel free to take a peek at some data insights from **Pitchfork Jazz** album reviews. Alternatively, on the **Jazz Discovery** page, search by Artists or Sub-Genres you know and enjoy and we'll introduce you to a variety of jazz albums that may be connected or similar in some way. Enjoy the jazz discovery journey!")
+
         st.title("Get a feel for the data")
         st.markdown("Choose below to see some insights into the data.")
         with st.spinner('Gathering the data...'):
             run_the_data()
 
     elif app_mode == "Jazz Discovery":
+        
+        st.title("The Modern Jazz Album Discovery Tool")
+        st.image("../img/drummer1.png",width=500)
+        st.markdown("---")                
+        st.markdown("**Welcome to the Jazz Discovery page**. See if an artist you enjoy was referenced in a jazz album review by Pitchfork. Use the **'Search by Artist'** button below for this. Alternatively look for an album based on a genre and subgenre you love and it will return albums that are most similar based on your musical preferences. For this, use the **'Search by Genre'** button below.")
         st.title("Get some Jazz Recs")
-        st.markdown("Below you can choose from over x jazz albums reviewed by Pitchfork and Jazztimes and it will return the albums that are the most similar based on your musical preferences")
         with st.spinner("Setting the stage..."):
             run_the_app()
             
             
-def render_svg(svg_file):
+# def render_svg(svg_file):
 
-    with open(svg_file, "r") as f:
-        lines = f.readlines()
-        svg = "".join(lines)
+#     with open(svg_file, "r") as f:
+#         lines = f.readlines()
+#         svg = "".join(lines)
 
-        """Renders the given svg string."""
-        b64 = base64.b64encode(svg.encode("utf-8")).decode("utf-8")
-        html = r'<img src="data:image/svg+xml;base64,%s"/>' % b64
-        return html            
+#         """Renders the given svg string."""
+#         b64 = base64.b64encode(svg.encode("utf-8")).decode("utf-8")
+#         html = r'<img src="data:image/svg+xml;base64,%s"/>' % b64
+#         return html            
 
 
 ## This is called in the main first
@@ -65,7 +78,7 @@ def run_the_data():
     sm_df = load_full_data('../data/df_emo_top_wide_nm.csv')
     gentime_df = load_full_data('../data/df_genre_time.csv')
     circbar_df = load_full_data('../data/df_top_mentions120.csv')
-    spot_df = load_full_data('../data/df_emo_top_long_nm_spfy.csv')
+    #spot_df = load_full_data('../data/df_emo_top_long_nm_spfy.csv')
     
     # cc: check how much data we have
     nreview = len(sm_df)
@@ -82,7 +95,7 @@ def run_the_data():
     
     # cc: descriptive stats
     
-    st.title("Some Visuals and Descriptives:")
+    st.title("Explore the data:")
     #st.write("---------------------------------------------------------------")
 #     st.subheader("Here are Some Descriptives:")
 #     stats_vis = st.checkbox("Look at the descriptive statistics")
@@ -136,7 +149,7 @@ def run_the_data():
         st.write("Here's a network graph of different artists Miles has influenced:")
         st.image(['../img/network_map_lbl.png'])
         
-    st.subheader("Here are Some Visuals based on the Audio Features:")        
+    # st.subheader("Here are Some Visuals based on the Audio Features:")        
     
     # cc: Spotify Audio
 #     viz_disp4 = st.checkbox("Let's see how different sub-genres compare in audio features:")
@@ -188,8 +201,8 @@ def run_the_app():
     with st.spinner("Taking the stage..."):
         sm_df_full = load_full_df()
         
-    with st.spinner("Taking the stage..."):
-        spot_df = load_spot_df()    
+    #with st.spinner("Taking the stage..."):
+    #    spot_df = load_spot_df()    
     
     
     ## FILTERING Happens here ##
@@ -210,8 +223,6 @@ def run_the_app():
 
         # Condition 3 (integer - how many album recs would you like to see)
 
-        
-        
         # filtered_df = sm_df_full[sm_df_full['review_clean2'].isin(user_list)]
         #st.write(f"Your artist search term: {user_list}")
 
@@ -219,8 +230,8 @@ def run_the_app():
         disco_button=st.button('Discover by Artist Mentions!')    
 
         # Turn off for now
-        
-        user_sims = st.number_input("Type in the number of similar albums to each match (Max 3):",min_value=0,max_value=3,step=1)
+        user_sims=0
+#         user_sims = st.number_input("Type in the number of similar albums to each match (Max 3):",min_value=0,max_value=3,step=1)
         
         
         
@@ -266,7 +277,7 @@ def run_the_app():
             try:
                 response = requests.get(url)
                 img = Image.open(BytesIO(response.content))
-                st.image(img)
+                st.image(img,width=200)
             
             except:
                 st.write("Sorry, Album artwork not available")
@@ -299,8 +310,7 @@ def run_the_app():
 #                 st.write(f"audio2 response: {audio2}")
 #                 st.audio(audio2)
                 
-                audio2=url
-                st.write(f"audio2 response: {audio2}")
+                audio2=url                
                 st.audio(audio2)
             
             
@@ -348,7 +358,7 @@ def run_the_app():
                 self.matrix_similar = matrix
             
             # this goes third (3)
-            def _print_message(self,album,recom_album,artist,image,audio,topic_label):
+            def _print_message(self,album,recom_album,artist,image,audio2,topic_label):
                 rec_items = len(recom_album)        
 
                 #print(f'The {rec_items} recommended albums for {album} are:')
@@ -360,13 +370,16 @@ def run_the_app():
                     if i==0:
                         
                         #print(f"Matched Album Number {i+1}:")
+                        load_image(image)
+                        
                         st.write(f"**{recom_album[i][1].title()}** *by* **{artist.title()}**") # with {round(recom_album[i][0],3)} similarity score")  # if can add artist sim score
                         # load the album cover
                         #st.write(f"image url {image}")
-                        load_image(image)
+                        
                         st.write(f"**Album Texture:** {topic_label.title()}") # with {round(recom_album[i][0],3)} 
                         
-                        load_audio(audio)
+                        #load_audio(audio)
+                        load_audio2(audio2)
                         
                     else:    
                         st.subheader(f"Recommended album based on matched (above) {i}:")            
@@ -383,7 +396,9 @@ def run_the_app():
                 # cc test - image
                 image = recommendation['image']
                 # cc test - spotify
-                audio = recommendation['audio']
+                #audio = recommendation['audio']
+                # cc test - spotify
+                audio2 = recommendation['audio2']
                 
                 # topic label 
                 topic_label = recommendation['topic_label']
@@ -393,7 +408,7 @@ def run_the_app():
                 recom_album = self.matrix_similar[album][:similar_albums]
                 # print each item (cc test
                 self._print_message(album=album,recom_album=recom_album,
-                                    artist=artist,image=image,audio=audio,topic_label=topic_label)
+                                    artist=artist,image=image,audio2=audio2,topic_label=topic_label)
 
         ##instantiate rec function
 
@@ -401,7 +416,7 @@ def run_the_app():
 
         ### Primary function for album recs based on REVIEW CLEAN (lowercase, remove punc, no lem)
         # This goes first (1)
-        def artsimrec(artmatch,simalb=None): # cc: simalb
+        def artsimrec(artmatch,simalb=0): # cc: simalb
             # get list of indices containing the chosen word that's in the review text            
             _a= sm_df.index[sm_df['review_clean2'].str.contains(user_input,na=False)]
             # get only # of keyword matches requested by user
@@ -416,11 +431,11 @@ def run_the_app():
                 #print(f"The number of reviews containing {art} are: {len(_a)}") 
                 st.write(f"The number of reviews containing {user_list} are: {len(_a)}") 
                 st.write(f"User requested {len(a)} Matches")
-                st.write(f"User requested {simalb} Recommended albums per Match")
+                #st.write(f"User requested {simalb} Recommended albums per Match") # cc:simalb
          
                 # loops through the function by number of desired matches
                 for k,j in enumerate(a):
-                    st.write("-----------------------------------------------------------------------------------")
+                    st.markdown("---")
                     st.subheader(f"Matched Album Number {k+1}:")
                     
                     # testing
@@ -435,7 +450,8 @@ def run_the_app():
                        "topic_label": sm_df['topic_label'].iloc[j], 
                        # cc testing
                        "image": sm_df['img_link'].iloc[j],
-                       "audio": sm_df['audio_link'].iloc[j], # cc testing
+                       # "audio": sm_df['audio_link'].iloc[j], # cc testing
+                       "audio2": sm_df['audio_link2'].iloc[j], # cc testing
                        "similar_albums": simalb+1  # add +1 to obtain the right number of similar albums
                     }
                     recommedations.recommend(recommendation)
@@ -444,7 +460,7 @@ def run_the_app():
         ### RUN RECOMMENDER - based on cosine sim
 
         #if st.button("Discover some Jazz!"):
-        st.write(artsimrec(artmatch=user_match ,simalb=user_sims)) # cc: user_sims
+        st.write(artsimrec(artmatch=user_match,simalb=user_sims)) # cc: user_sims
 #         else:
 #             st.write(artsimrec(artmatch=user_match,simalb=user_sims))
     
@@ -492,7 +508,7 @@ def run_the_app():
                 rec_alb_dict['topic_label'] = sm_df_full.loc[full_ind]['topic_label']
                 # testing
                 #rec_alb_dict['valence'] = spot_df.loc[full_ind]['valence']
-                rec_alb_dict['valence'] = sm_df_full.loc[full_ind]['audio_link']
+                #rec_alb_dict['valence'] = sm_df_full.loc[full_ind]['audio_link']
                 # testing
                 rec_alb_dict['audio2'] = sm_df_full.loc[full_ind]['audio_link2']
                 
@@ -521,26 +537,28 @@ def run_the_app():
             
             # Print to the App
             for i in range(0,5):
-                st.write("***")
+                #st.write("***")
+                st.markdown("---")
                 st.subheader(f"Recommended Album # {i+1}:")
                 img_url = recommended_albums[i]['Image']
-                img_url = img_url.strip('\"')
+                img_url = img_url.strip('\"')                
+                load_image(img_url)
+                
                 st.write(f"**{recommended_albums[i]['album'].title()}** *by* **{recommended_albums[i]['artist'].title()}** with **{round(score_series.iloc[i],3)}** similarity score") # in the {recommended_albums[i]['subgenre2'].title()} sub-genre")
                 #st.write(f"image url {img_url}")
                 
-                load_image(img_url)                
-                
                 st.write(f"**Album Texture:** {recommended_albums[i]['topic_label'].title()}")
                 
-                audio_url = recommended_albums[i]['valence']
+                # audio_url = recommended_albums[i]['valence']
                 audio_url2 = recommended_albums[i]['audio2']
+                load_audio2(audio_url2)
                 #audio_url  = audio_url.strip('\"')
                 #st.write(f"Audio url: {audio_url}")
-                load_audio(audio_url)
+                #load_audio(audio_url)
                 
                 #audio_url2 = audio_url2.strip('\"')
                 #st.write(f"audio url: {audio_url2}") # use if you want link
-                load_audio2(audio_url2)
+                
                 
                 # st.write(f"**Album Valence:** {recommended_albums[i]['valence']}")
                 # add spotify audio feats
