@@ -13,10 +13,10 @@ The purpose of this project was to build a recommendation system to allow users 
 <br>
 <br>
 **Data:**<br>
-I scraped jazz album review data from Pitchfork magazines website:<br>
-https://pitchfork.com/<br>
-Between 1999-2021 we had roughly 20,000 total reviews, 700 of which were primarily jazz album reviews. Each document in our data was a jazz album review.<br>
-There were a number of exploratory analyses that were done that didn't make it into the final presentation. Data sources used for these are as follows:<br>
+. I scraped jazz album review data from Pitchfork magazines website:<br>
+. https://pitchfork.com/<br>
+. Between 1999-2021 we had roughly 20,000 total reviews, 700 of which were primarily jazz album reviews. Each document in our data was a jazz album review.<br>
+. There were a number of exploratory analyses that were done that didn't make it into the final presentation. Data sources used for these are as follows:<br>
 . For sentiment/emotion analysis, I used the NRC word-emotion association lexicon which is also publicly available and widely used in research:<br>
 http://web.stanford.edu/class/cs124/NRC-emotion-lexicon-wordlevel-alphabetized-v0.92.txt
 . I obtained audio features for all jazz albums through Spotify's API. Features include danceability, tempo, liveness, speechiness, etc.<br>
@@ -37,7 +37,7 @@ Data cleaning and pre-processing:<br>
 **Programs:**<br>
 <br>
 <br>
-**. pitchfork-bsoup.ipynb<br>
+**. pitchfork-bsoup.ipynb**<br>
 	. This program was used to scrape reviews and other essential data from pitchfork.com<br>
 **. 01_pitchfork_review_analysis.ipynb**<br>
 	. This is the primary program that includes data cleaning as well as EDA and recommendation analysis<br>
@@ -66,7 +66,7 @@ Data cleaning and pre-processing:<br>
 	. this function creates the spotify audio feature graphs for albums<br>
 
 <br>
-**Summary:**<br>
+**Summary:** <br>
 <br>
 The final product is a streamlit app which allows users to do the following:<br>
 	. explore the pitchfork data - meaning looking at top genres of music mentioned in jazz reviews<br>
@@ -74,6 +74,8 @@ The final product is a streamlit app which allows users to do the following:<br>
 	. see how artists are connected to Miles Davis<br>
 	. obtain recommended jazz albums to listen to based on users preference of music genres<br>
 	. obtain recommended jazz albums to listen to based on searching for non-jazz artists<br>
+<br>
+**Future Improvements:**<br>
 I performed quite a few QC checks of the data to make sure recommendations and matches made sense by comparing review text themselves and seeing the word counts and matches between some examples.<br>
 There is still future work to be done on this project as this app is currently still in beta mode. These are the proposed future improvements:<br>
 	. link to spotify audio for streaming full albums<br>
