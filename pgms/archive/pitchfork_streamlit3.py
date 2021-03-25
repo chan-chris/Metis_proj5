@@ -82,8 +82,7 @@ def run_the_data():
         st.write("This is the trend of jazz sub-genres over the years:")                
         fig, ax = plt.subplots(figsize=(11, 8))
         #cmap= sns.cubehelix_palette()
-        kwargs = {'alpha':.9,'linewidth':1, 'linestyle':'-', 'linecolor':'k','rasterized':False, 'edgecolor':'w', "capstyle":'projecting',}
-        gentime_df_rmv = gentime_df[1:]
+        kwargs = {'alpha':.9,'linewidth':1, 'linestyle':'-', 'linecolor':'k','rasterized':False, 'edgecolor':'w',
         sns.heatmap(gentime_df_rmv, cmap='cubehelix', **kwargs )
         plt.tight_layout()
         st.pyplot() 

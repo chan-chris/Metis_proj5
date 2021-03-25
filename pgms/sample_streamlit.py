@@ -184,7 +184,7 @@ def run_the_app():
         # getting the indexes of the 100 most similar beers
         top_20_indexes = list(score_series.iloc[1:100].index)
     
-        # populating the list with the titles of the best 10 matching beers
+            # populating the list with the titles of the best 10 matching beers
     
     
         if filter_by == 'No':
