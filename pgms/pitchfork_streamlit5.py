@@ -22,6 +22,8 @@ def main():
     st.sidebar.title("What do you want to do?")
     app_mode = st.sidebar.selectbox("Choose the mode", ["Explore the data", "Jazz Discovery"])
 
+
+    # 2 options - exploratory and recommender
     if app_mode == "Explore the data":
         
         st.title("The Modern Jazz Album Discovery Tool")
@@ -55,15 +57,15 @@ def run_the_data():
         return data
 
     # cc: trying out diff dataframe formats    
-    sm_df_full = load_full_data('../data/df_emo_top_long_nm_spfy.csv')    
-    sm_df = load_full_data('../data/df_emo_top_wide_nm.csv')
-    gentime_df = load_full_data('../data/df_genre_time.csv')
-    circbar_df = load_full_data('../data/df_top_mentions120.csv')
+    sm_df_full  = load_full_data('../data/df_emo_top_long_nm_spfy.csv')    
+    sm_df       = load_full_data('../data/df_emo_top_wide_nm.csv')
+    gentime_df  = load_full_data('../data/df_genre_time.csv')
+    circbar_df  = load_full_data('../data/df_top_mentions120.csv')
     #spot_df = load_full_data('../data/df_emo_top_long_nm_spfy.csv')
     
     # cc: check how much data we have
-    nreview = len(sm_df)
-    nartists = len(pd.unique(sm_df['artist']))
+    nreview     = len(sm_df)
+    nartists    = len(pd.unique(sm_df['artist']))
    
     st.write(f"{nreview} Unique Albums and Reviews")
     st.write(f"{nartists} Artists")
@@ -80,16 +82,11 @@ def run_the_data():
     if viz_disp:
         st.write("This is the trend of jazz sub-genres over the years:")
         st.image(['../img/heatmap_subgenre_10.png'])
-
-        # cc: pull top 3 artists based on genre (mentions) and year (long file)
         st.write("Take a closer look at some artists per sub-genre and year:")
-
         sg_select1 = st.selectbox('Choose a sub-genre:', sm_df_full['subgenre2'].unique().tolist())
-        sg_select2 = st.selectbox('Choose a year:', sm_df_full.loc[sm_df_full['subgenre2']==sg_select1]['year'].unique().tolist())
-        
+        sg_select2 = st.selectbox('Choose a year:', sm_df_full.loc[sm_df_full['subgenre2']==sg_select1]['year'].unique().tolist())        
         sg_select3 = sm_df_full.loc[(sm_df_full['subgenre2']==sg_select1) & (sm_df_full['year']==sg_select2),'album'].unique().tolist()
                 
-    
     # cc: top artist mentions
     viz_disp2 = st.checkbox("Look at the top-artist mentions of all-time")
     if viz_disp2:        
@@ -106,15 +103,13 @@ def run_the_data():
         st.write("Here's a network graph of different artists Miles has influenced:")
         st.image(['../img/network_map_lbl.png'])
         
-        
 ## This is the primary function that begins and calls other functions
 
 def run_the_app():
     
     st.subheader("Let's get started!")
 
-    # cc: trying out different dataframe formats
-    # Keep as wide small for now
+    # cc: trying out different dataframe formats    
     @st.cache
     def load_sm_df():
         data = pd.read_csv('../data/df_emo_top_wide_nm.csv', index_col=0)
@@ -150,21 +145,19 @@ def run_the_app():
         # cc: try a text string    
 
         # Condition 1 (text search)
-        user_input = st.text_input("OPTION 1: Type in a favorite artist and see if there's a connection (lowercase):")
-        user_list = list(user_input.split(" "))
+        user_input  = st.text_input("OPTION 1: Type in a favorite artist and see if there's a connection (lowercase):")
+        user_list   = list(user_input.split(" "))
         
         
         # Condition 2 (integer - how many matches would you like to see)
-        user_match = st.number_input("Type in the number of matches (if any) you'd like to see (Max 10):",min_value=0, max_value=10, step=1) #, format=None, key=None))
+        user_match  = st.number_input("Type in the number of matches (if any) you'd like to see (Max 10):",min_value=0, max_value=10, step=1) #, format=None, key=None))
         #user_match_list = list(user_match_int)
     
         disco_button=st.button('Discover by Artist Mentions!')    
 
         # Turn off for now
-        user_sims=0
+        user_sims   =0
 #         user_sims = st.number_input("Type in the number of similar albums to each match (Max 3):",min_value=0,max_value=3,step=1)
-        
-        
         
     
     elif filter_by == 'Search by Genre':
@@ -182,9 +175,8 @@ def run_the_app():
         sub_ometer = st.selectbox('Subgenre Frequency:', sm_df_full.loc[sm_df_full['subgenre2'] == chosen_subsub]['count'].unique().tolist()) 
         
         # Based on above conditions here are your lists
-        desired_artist = st.selectbox("Here's a list of artists:", sm_df_full.loc[(sm_df_full["subgenre2"] == chosen_subsub) & (sm_df_full["count"] == sub_ometer), 'artist'].unique().tolist()) #.iloc[0]
-
-        desired_album = sm_df_full.loc[(sm_df_full["subgenre2"] == chosen_subsub) & (sm_df_full["artist"] == desired_artist) & (sm_df_full["count"]==sub_ometer),'album'].unique().tolist()
+        desired_artist  = st.selectbox("Here's a list of artists:", sm_df_full.loc[(sm_df_full["subgenre2"] == chosen_subsub) & (sm_df_full["count"] == sub_ometer), 'artist'].unique().tolist()) #.iloc[0]
+        desired_album   = sm_df_full.loc[(sm_df_full["subgenre2"] == chosen_subsub) & (sm_df_full["artist"] == desired_artist) & (sm_df_full["count"]==sub_ometer),'album'].unique().tolist()
 
 
     @st.cache
@@ -283,17 +275,11 @@ def run_the_app():
                         
             # This goes second (2)
             def recommend(self, recommendation):
-                artist = recommendation['artist']
+                artist  = recommendation['artist']
                 # Get album to find recommendations for
-                album = recommendation['album']
-                # cc test - image
-                image = recommendation['image']
-                # cc test - spotify
-                #audio = recommendation['audio']
-                # cc test - spotify
-                audio2 = recommendation['audio2']
-                
-                # topic label 
+                album   = recommendation['album']                
+                image   = recommendation['image']
+                audio2  = recommendation['audio2']
                 topic_label = recommendation['topic_label']
                 # Get number of albums to recommend
                 similar_albums = recommendation['similar_albums']
@@ -330,17 +316,12 @@ def run_the_app():
                 for k,j in enumerate(a):
                     st.markdown("---")
                     st.subheader(f"Matched Album Number {k+1}:")
-                    
-                    # testing
-                    
+                                        
                     recommendation = {
                        "artist": sm_df['artist'].iloc[j],
-                       "album": sm_df['album'].iloc[j],
-                       # cc testing
+                       "album": sm_df['album'].iloc[j],                    
                        "topic_label": sm_df['topic_label'].iloc[j], 
-                       # cc testing
                        "image": sm_df['img_link'].iloc[j],
-                       # "audio": sm_df['audio_link'].iloc[j], # cc testing
                        "audio2": sm_df['audio_link2'].iloc[j], # cc testing
                        "similar_albums": simalb+1  # add +1 to obtain the right number of similar albums
                     }
