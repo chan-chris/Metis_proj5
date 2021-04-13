@@ -14,6 +14,16 @@ import pyLDAvis.gensim
 import def_circbar as cb
 import xml.etree.ElementTree as ET
 from IPython.display import Audio
+from playsound import playsound
+import vlc
+import urllib3  # the lib that handles the url stuff
+import soundfile as sf
+import io
+from six.moves.urllib.request import urlopen
+import streamlit.components.v1 as components
+
+
+
 #import def_radar as spot
 
 st.set_option('deprecation.showPyplotGlobalUse', False)
@@ -58,7 +68,7 @@ def run_the_data():
 
     # cc: trying out diff dataframe formats    
     sm_df_full  = load_full_data('../data/df_emo_top_long_nm_spfy.csv')    
-    sm_df       = load_full_data('../data/df_emo_top_wide_nm.csv')
+    sm_df       = load_full_data('../data/df_emo_top_wide_nm_spuri.csv')
     gentime_df  = load_full_data('../data/df_genre_time.csv')
     circbar_df  = load_full_data('../data/df_top_mentions120.csv')
     #spot_df = load_full_data('../data/df_emo_top_long_nm_spfy.csv')
@@ -112,7 +122,7 @@ def run_the_app():
     # cc: trying out different dataframe formats    
     @st.cache
     def load_sm_df():
-        data = pd.read_csv('../data/df_emo_top_wide_nm.csv', index_col=0)
+        data = pd.read_csv('../data/df_emo_top_wide_nm_spuri.csv', index_col=0)
         return data
     
     # cc: change to long
@@ -195,6 +205,7 @@ def run_the_app():
             try:
                 response = requests.get(url)
                 img = Image.open(BytesIO(response.content))
+                #st.write(f"IMG Bytes IO {img}")
                 st.image(img,width=200)
             
             except:
@@ -215,13 +226,59 @@ def run_the_app():
                 audio=url
                 st.image([audio])
                 
+#     def load_audio2(url):
+#         if type(url) == str:
+#             try:
+#                 audio2=url                
+#                 st.audio(audio2)
+#             except:
+#                 audio2=None
+    
     def load_audio2(url):
         if type(url) == str:
             try:
-                audio2=url                
-                st.audio(audio2)
+                #response=requests.get(url)
+                #st.write(f"This is AUDIO 2 Response : {response}")
+              #  aud=BytesIO(response.content)
+              #  st.write(f"This is audresp:{aud}")
+              #  st.audio(aud)
+                #audio2="spotify:track:3rTIcUMMP2Ez33DfjJlb9e:autoplay:true"
+                audio2=url #"https://open.spotify.com/embed/track/6DsrBHXBFNUpU1mwa72e4w?si=99368499e9aa4ecc"
+                
+                components.iframe(audio2 , width=600, height=200)
+                
+                
+#                 components.iframe(audio2,height=200,width=200)
+               # st.audio(components.iframe(audio2,height=200,width=500))
+                #st.write(f"thisis xyz {xyz}")
+#                 x,xrate = sf.read(io.BytesIO(urlopen(audio2).read()))
+#                 st.write(f"This is read rates {x} {xrate}")
+               
+#                 st.audio(audio2)
+#                 audio2=url
+#                 st.write(f"This is AUDIO 2 : {audio2}")
+
+#                st.audio("https://open.spotify.com/album/4lICuLCjyvCAF6fylwaN37?si=-5dCm0LlSdO0fKhDCFY1SQ")
+#                p=playsound(audio2)
+
+                #x = urllib3.urlopen(url) # it's a file like object and works just like a file
+                #st.audio(audio2)
+               # p = vlc.MediaPlayer(audio2)
+               # st.write(f"This is AUDIO 2 vlc : {p}")
+#                 st.audio([audio2])
+#                 p.play()
+#                 audio_file = open(BytesIO(audio2))
+#                 st.write(f"This is AUDIO file : {audio_file}")
+                
+#                 audio_bytes = audio_file.read()
+#                 st.write(f"This is AUDIO FILE : {audio_file}")
+#                 st.write(f"This is AUDIO BYTES : {audio_bytes}")
+#                 st.audio(audio_bytes, format='audio/ogg')
+                
+#                 st.audio(audio2)
             except:
                 audio2=None
+                st.write(f"AUDIO 2 Not working {type(url)}")
     
     
 ########################################################################################
@@ -322,7 +379,7 @@ def run_the_app():
                        "album": sm_df['album'].iloc[j],                    
                        "topic_label": sm_df['topic_label'].iloc[j], 
                        "image": sm_df['img_link'].iloc[j],
-                       "audio2": sm_df['audio_link2'].iloc[j], # cc testing
+                       "audio2": sm_df['album_uri_link'].iloc[j], # cc testing
                        "similar_albums": simalb+1  # add +1 to obtain the right number of similar albums
                     }
                     recommedations.recommend(recommendation)
@@ -358,10 +415,10 @@ def run_the_app():
             # creating a Series with the similarity scores in descending order
             score_series = pd.Series(cosine_sim[idx]).sort_values(ascending = False)
             
-            # getting the indexes of the 100 most similar brs
+            # getting the indexes of the 100 most similar albums
             top_20_indexes = list(score_series.iloc[0:100].index)
 
-                # populating the list with the titles of the best 10 matching brs
+                # populating the list with the titles of the best 10 matching albums
 
             #if filter_by == 'No':
 
@@ -378,7 +435,7 @@ def run_the_app():
                 rec_alb_dict['Image'] = sm_df_full.loc[full_ind]['img_link']
                 rec_alb_dict['topic_label'] = sm_df_full.loc[full_ind]['topic_label']
                 # testing
-                rec_alb_dict['audio2'] = sm_df_full.loc[full_ind]['audio_link2']
+                rec_alb_dict['audio2'] = sm_df_full.loc[full_ind]['album_uri_link']
                 
                 recommended_albums.append(rec_alb_dict)
                 
@@ -397,6 +454,7 @@ def run_the_app():
                 st.write(f"**Album Texture:** {recommended_albums[i]['topic_label'].title()}")
                 
                 audio_url2 = recommended_albums[i]['audio2']
+                audio_url2 = audio_url2.strip('\"')
                 load_audio2(audio_url2)
                 st.button(f"Love it! {recommended_albums[i]['album']}")
                 st.button(f"Not into it! {recommended_albums[i]['album']}")
