@@ -20,10 +20,10 @@ import numpy as np
 from PIL import Image
 import requests
 from io import BytesIO
-import plotly.figure_factory as ff
-import plotly.express as px
+# import plotly.figure_factory as ff
+# import plotly.express as px
 import matplotlib.pyplot as plt
-import plotly.graph_objects as go
+# import plotly.graph_objects as go
 import seaborn as sns
 import pyLDAvis.gensim
 import def_circbar as cb
