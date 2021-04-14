@@ -36,7 +36,7 @@ def main():
     if app_mode == "Explore the data":
         
         st.title("The Modern Jazz Album Discovery Tool")
-        st.image('jazzcoverstring.png',width=600)
+        st.image('.img/jazzcoverstring.png',width=700)
         st.markdown("---")
         st.markdown("**Hello music lovers** and welcome to my **Modern Jazz Album Discovery Recommender**. On this page, feel free to take a peek at some data insights from **Pitchfork Jazz** album reviews. Alternatively, on the **Jazz Discovery** page, search by Artists or Sub-Genres you know and enjoy and we'll introduce you to a variety of jazz albums that may be connected or similar in some way. Enjoy the jazz discovery journey!")
 
@@ -48,7 +48,7 @@ def main():
     elif app_mode == "Jazz Discovery":
         
         st.title("The Modern Jazz Album Discovery Tool")
-        st.image("/img/drummer1.png",width=500)
+        st.image("/img/drummer1.png",width=700)
         st.markdown("---")                
         st.markdown("**Welcome to the Jazz Discovery page**. See if an artist you enjoy was referenced in a jazz album review by Pitchfork. Use the **'Search by Artist'** button below for this. Alternatively look for an album based on a genre and subgenre you love and it will return albums that are most similar based on your musical preferences. For this, use the **'Search by Genre'** button below.")
         st.title("Get some Jazz Recs")
