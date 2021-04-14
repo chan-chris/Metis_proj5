@@ -15,31 +15,15 @@ Need to incorporate collaborative filtering with "like" button
 
 import streamlit as st
 import pandas as pd
-import pickle
 import numpy as np
 from PIL import Image
 import requests
 from io import BytesIO
-# import plotly.figure_factory as ff
-# import plotly.express as px
 import matplotlib.pyplot as plt
-# import plotly.graph_objects as go
 import seaborn as sns
-import pyLDAvis.gensim
 import def_circbar as cb
-import xml.etree.ElementTree as ET
 from IPython.display import Audio
-from playsound import playsound
-import vlc
-import urllib3  # the lib that handles the url stuff
-import soundfile as sf
-import io
-from six.moves.urllib.request import urlopen
 import streamlit.components.v1 as components
-
-
-
-#import def_radar as spot
 
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
