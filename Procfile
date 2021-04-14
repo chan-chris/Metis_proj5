@@ -1,0 +1,1 @@
+web: sh setup.sh && streamlit run pitchfork_streamlit6.py
