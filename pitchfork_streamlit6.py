@@ -36,7 +36,7 @@ def main():
     if app_mode == "Explore the data":
         
         st.title("The Modern Jazz Album Discovery Tool")
-        st.image("img/jazzcoverstring.png",width=600)
+        st.image("/img/jazzcoverstring.png",width=600)
         st.markdown("---")
         st.markdown("**Hello music lovers** and welcome to my **Modern Jazz Album Discovery Recommender**. On this page, feel free to take a peek at some data insights from **Pitchfork Jazz** album reviews. Alternatively, on the **Jazz Discovery** page, search by Artists or Sub-Genres you know and enjoy and we'll introduce you to a variety of jazz albums that may be connected or similar in some way. Enjoy the jazz discovery journey!")
 
