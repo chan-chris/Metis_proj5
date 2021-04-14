@@ -5,5 +5,4 @@ Image
 requests
 matplotlib
 seaborn
-def_circbar
 Audio
