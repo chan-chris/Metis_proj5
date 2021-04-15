@@ -344,7 +344,7 @@ def run_the_app():
         ### RUN RECOMMENDER - based on cosine sim
 
         #if st.button("Discover some Jazz!"):
-        st.write(artsixmrec(artmatch=user_match,simalb=user_sims)) # cc: user_sims
+        st.write(artsimrec(artmatch=user_match,simalb=user_sims)) # cc: user_sims
 #         else:
 #             st.write(artsimrec(artmatch=user_match,simalb=user_sims))
     
