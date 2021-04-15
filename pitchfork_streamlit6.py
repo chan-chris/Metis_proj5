@@ -36,7 +36,7 @@ def main():
     if app_mode == "Explore the data":
         
         st.title("The Modern Jazz Album Discovery Tool")
-        st.image('heroku/img/jazzcoverstring.png',width=690)
+        st.image('heroku/heroku_img/jazzcoverstring.png',width=690)
         st.markdown("---")
         st.markdown("**Hello music lovers** and welcome to my **Modern Jazz Album Discovery Recommender**. On this page, feel free to take a peek at some data insights from **Pitchfork Jazz** album reviews. Alternatively, on the **Jazz Discovery** page, search by Artists or Sub-Genres you know and enjoy and we'll introduce you to a variety of jazz albums that may be connected or similar in some way. Enjoy the jazz discovery journey!")
 
@@ -48,7 +48,7 @@ def main():
     elif app_mode == "Jazz Discovery":
         
         st.title("The Modern Jazz Album Discovery Tool")
-        st.image("heroku/img/drummer1.png",width=690)
+        st.image("heroku/heroku_img/drummer1.png",width=690)
         st.markdown("---")                
         st.markdown("**Welcome to the Jazz Discovery page**. See if an artist you enjoy was referenced in a jazz album review by Pitchfork. Use the **'Search by Artist'** button below for this. Alternatively look for an album based on a genre and subgenre you love and it will return albums that are most similar based on your musical preferences. For this, use the **'Search by Genre'** button below.")
         st.title("Get some Jazz Recs")
@@ -66,10 +66,10 @@ def run_the_data():
         return data
 
     # cc: trying out diff dataframe formats    
-    sm_df_full  = load_full_data('heroku/data/df_emo_top_long_nm_spfy.csv')    
-    sm_df       = load_full_data('heroku/data/df_emo_top_wide_nm_spuri.csv')
-    gentime_df  = load_full_data('heroku/data/df_genre_time.csv')
-    circbar_df  = load_full_data('heroku/data/df_top_mentions120.csv')
+    sm_df_full  = load_full_data('heroku/heroku_data/df_emo_top_long_nm_spfy.csv')    
+    sm_df       = load_full_data('heroku/heroku_data/df_emo_top_wide_nm_spuri.csv')
+    gentime_df  = load_full_data('heroku/heroku_data/df_genre_time.csv')
+    circbar_df  = load_full_data('heroku/heroku_data/df_top_mentions120.csv')
     #spot_df = load_full_data('../data/df_emo_top_long_nm_spfy.csv')
     
     # cc: check how much data we have
@@ -90,7 +90,7 @@ def run_the_data():
     
     if viz_disp:
         st.write("This is the trend of jazz sub-genres over the years:")
-        st.image(['heroku/img/heatmap_subgenre_10.png'])
+        st.image(['heroku/heroku_img/heatmap_subgenre_10.png'])
 # cc: remove function since it's less important        
 #         st.write("Take a closer look at some artists per sub-genre and year:")
 #         sg_select1 = st.selectbox('Choose a sub-genre:', sm_df_full['subgenre2'].unique().tolist())
@@ -113,7 +113,7 @@ def run_the_data():
     viz_disp3 = st.checkbox("Checkout how Miles Davis has influenced music:")
     if viz_disp3:
         st.write("Here's a network graph of different artists Miles has influenced:")
-        st.image(['heroku/img/network_map_lbl.png'])
+        st.image(['heroku/heroku_img/network_map_lbl.png'])
         
 ## This is the primary function that begins and calls other functions
 
@@ -124,14 +124,14 @@ def run_the_app():
     # cc: trying out different dataframe formats    
     @st.cache
     def load_sm_df():
-        data = pd.read_csv('heroku/data/df_emo_top_wide_nm_spuri.csv', index_col=0)
+        data = pd.read_csv('heroku/heroku_data/df_emo_top_wide_nm_spuri.csv', index_col=0)
         return data
     
     # cc: change to long
     @st.cache
     def load_full_df():
         #data = pd.read_csv('../data/df_genre_stream_sub_long.csv', index_col=0)
-        data = pd.read_csv('heroku/data/df_emo_top_long_nm_spfy.csv', index_col=0)
+        data = pd.read_csv('heroku/heroku_data/df_emo_top_long_nm_spfy.csv', index_col=0)
         return data
 
     # cc: change to long
@@ -211,7 +211,7 @@ def run_the_app():
                 st.image(img,width=200)
             
             except:
-                st.image(['heroku/img/sax.jpeg'])
+                st.image(['heroku/heroku_img/sax.jpeg'])
                 #None 
 
     def load_audio(url):
@@ -233,7 +233,7 @@ def run_the_app():
                 audio2=url 
                 components.iframe(audio2 , width=600, height=200)
             except:
-                st.image(['heroku/img/sax.jpeg'])
+                st.image(['heroku/heroku_img/sax.jpeg'])
 #                 audio2=None
 #                 st.write(f"Sorry, no playlist found in Spotify for this album")
     
