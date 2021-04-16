@@ -386,7 +386,7 @@ def run_the_app():
 
                 rec_alb_dict['album'] = list(sm_df.album)[i]
                 rec_alb_dict['artist'] = sm_df_full.loc[full_ind]['artist']
-                rec_alb_dict['score'] = sm_df_full.loc[full_ind]['score']
+                #rec_alb_dict['score'] = sm_df_full.loc[full_ind]['score']
                 rec_alb_dict['subgenre2'] = sm_df_full.loc[full_ind]['subgenre2']
                 rec_alb_dict['Image'] = sm_df_full.loc[full_ind]['img_link']
                 rec_alb_dict['topic_label'] = sm_df_full.loc[full_ind]['topic_label']
